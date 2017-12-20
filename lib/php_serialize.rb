@@ -164,7 +164,8 @@ module PHP
 
 		ret = nil
 		string = StringIOReader.new(string)
-		while string.string[string.pos, 32] =~ /^(\w+)\|/ # session_name|serialized_data
+		string.string.force_encoding('ASCII-8BIT')
+		while string.string[string.pos, string.string.length] =~ /^([\w\/]+)\|/ # session_name|serialized_data
 			ret ||= {}
 			string.pos += $&.size
 			ret[$1] = PHP.do_unserialize(string, classmap, assoc)
